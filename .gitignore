@@ -130,6 +130,10 @@ ENV/
 env.bak/
 venv.bak/
 
+# Environment & secrets
+.env                            # Environment variables
+*.env                           # Any other environment files
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -160,3 +164,20 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# OS files
+.DS_Store                       # macOS
+Thumbs.db                       # Windows
+
+# Next.js and Node
+node_modules/                   # Node dependencies
+.next/                          # Next.js build output
+out/                            # Next.js static export output
+
+# Python and Django
+*.pyc
+__pycache__/
+*.sqlite3
+db.sqlite3
+/media/                         # Django media uploads
+/static/                        # Django static files (if generated here, but may not need to ignore)
