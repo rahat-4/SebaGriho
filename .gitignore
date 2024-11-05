@@ -177,7 +177,11 @@ out/                            # Next.js static export output
 # Python and Django
 *.pyc
 __pycache__/
+
 *.sqlite3
 db.sqlite3
 /media/                         # Django media uploads
 /static/                        # Django static files (if generated here, but may not need to ignore)
+
+**/migrations/*
+!**/migrations/__init__.py
