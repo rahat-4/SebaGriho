@@ -1,0 +1,57 @@
+{
+    "user": {
+      "email": "nahid@example.com",
+      "phone": "+8801776199864",
+      "first_name": "Nahid",
+      "last_name": "Hasan"
+    },
+    "about": "Experienced physician specializing in internal medicine.",
+    "experience": 4,
+    "appointment_fee": 300,
+    "consultation_fee": 300,
+    "follow_up_fee": 100,
+    "check_up_fee": 100,
+    "status": "ACTIVE",
+    "degrees": [
+      {
+        "name": "MBBS",
+        "institution": "Dhaka Medical College",
+        "year": 2005
+      },
+      {
+        "name": "FCPS",
+        "institution": "Johns Hopkins University",
+        "year": 2010
+      }
+    ],
+    "achievements": [
+      {
+        "name": "Best Doctor Award",
+        "year": 2015,
+        "source": "Awarded the best doctor in the state."
+      }
+    ],
+    "specialties": [
+      {
+        "name": "Medicine",
+        "department": {
+          "name": "Internal Medicine"
+        }
+      }
+    ],
+    "affiliations": [
+      {
+        "hospital_name": "Islami Bank Hospital, Mugda",
+        "title": "Consultant",
+        "start_year": 2011
+      }
+    ],
+    "languages_spoken": [
+      {
+        "language": "English"
+      },
+      {
+        "language": "Bangla"
+      }
+    ]
+  }
