@@ -10,14 +10,16 @@ import User from "./User";
 import UseResponsive from "../UseResponsive";
 
 const HeaderMenu = () => {
-  const { isXs, isSm, isXl } = UseResponsive();
+  const { isXs, isSm, isMd, isLg, isXl, isAboveXl } = UseResponsive();
 
   const logoSize = useMemo(() => {
     if (isXs) return 20;
     if (isSm) return 25;
+    if (isMd) return 30;
+    if (isLg) return 35;
     if (isXl) return 40;
-    return 30;
-  }, [isXs, isSm, isXl]);
+    return 45;
+  }, [isXs, isSm, isMd, isLg, isXl, isAboveXl]);
 
   return (
     <div
@@ -25,10 +27,9 @@ const HeaderMenu = () => {
         position: "sticky",
         top: 0,
         zIndex: 1,
-        paddingBottom: "15px",
       }}
     >
-      <Group justify="space-between" pt={5} px={5}>
+      <Group justify="space-between" p={10}>
         <Image src="/logo.png" alt="logo" height={logoSize} />
 
         <SearchComponent />

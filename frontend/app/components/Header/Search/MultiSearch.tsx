@@ -21,26 +21,25 @@ const MultiSearch: React.FC<MultiProps> = ({
   icon,
   data,
 }) => {
-  const { isXs, isSm, isMd, isLg, isXl } = UseResponsive();
+  const { isXs, isSm, isMd, isLg, isXl, isAboveXl } = UseResponsive();
 
   const getInputSize = () => {
-    if (isXs || isSm || isMd) {
-      return 80;
-    }
-    if (isLg || isXl) {
-      return 100;
-    }
+    if (isSm) return 90;
+    if (isMd) return 120;
+    if (isLg) return 150;
+    if (isXl) return 180;
   };
 
   return (
     <MultiSelect
+      pl={placeholder === "Speciality" ? 10 : 0}
       radius="md"
       variant={isXs ? "filled" : "unstyled"}
       clearable
       searchable
       nothingFoundMessage="No items found"
       withScrollArea={false}
-      size={size}
+      size={isAboveXl || isXl ? "sm" : size}
       placeholder={placeholder}
       rightSection={icon}
       data={data}
@@ -52,33 +51,41 @@ const MultiSearch: React.FC<MultiProps> = ({
 };
 
 export const SpecialitySearch = () => {
+  const { isXs, isSm, isMd, isLg, isXl, isAboveXl } = UseResponsive();
+
   return (
     <MultiSearch
       size={"xs"}
       placeholder="Speciality"
-      icon={<IconStethoscope size={14} color="#FF385C" />}
+      icon={
+        <IconStethoscope size={isAboveXl || isXl ? 20 : 14} color="#FF385C" />
+      }
       data={SPECIALITIES}
     />
   );
 };
 
 export const CitySearch = () => {
+  const { isXs, isSm, isMd, isLg, isXl, isAboveXl } = UseResponsive();
+
   return (
     <MultiSearch
       size={"xs"}
       placeholder="City"
-      icon={<IconMapPin size={14} color="#FF385C" />}
+      icon={<IconMapPin size={isAboveXl || isXl ? 20 : 14} color="#FF385C" />}
       data={CITIES}
     />
   );
 };
 
 export const ThanaSearch = () => {
+  const { isXs, isSm, isMd, isLg, isXl, isAboveXl } = UseResponsive();
+
   return (
     <MultiSearch
       size={"xs"}
       placeholder="Thana"
-      icon={<IconPrison size={14} color="#FF385C" />}
+      icon={<IconPrison size={isAboveXl || isXl ? 20 : 14} color="#FF385C" />}
       data={THANAS}
     />
   );

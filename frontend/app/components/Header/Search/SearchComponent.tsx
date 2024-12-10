@@ -18,7 +18,8 @@ import { SpecialitySearch, CitySearch, ThanaSearch } from "./MultiSearch";
 import UseResponsive from "../../UseResponsive";
 
 const SearchComponent = () => {
-  const { isXs } = UseResponsive();
+  const { isXs, isSm, isMd, isLg, isXl, isAboveXl } = UseResponsive();
+
   const [opened, { open, close }] = useDisclosure(false);
 
   return isXs ? (
@@ -77,7 +78,7 @@ const SearchComponent = () => {
     </>
   ) : (
     <Group
-      px={5}
+      p={3}
       justify="center"
       gap={0}
       style={{
@@ -94,10 +95,12 @@ const SearchComponent = () => {
         c={"white"}
         variant="filled"
         color="#FF385C"
-        size={"sm"}
+        size={isAboveXl || isXl ? 50 : isLg ? 45 : isMd ? 40 : 35}
         radius="xl"
       >
-        <IconSearch size={14} />
+        <IconSearch
+          size={isAboveXl || isXl ? 22 : isLg ? 20 : isMd ? 18 : 16}
+        />
       </ActionIcon>
     </Group>
   );

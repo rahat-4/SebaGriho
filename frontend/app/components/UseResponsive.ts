@@ -1,29 +1,25 @@
-import { useMantineTheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
-const UseResponsive = () => {
-  const theme = useMantineTheme();
+// Define breakpoints for reuse
+const breakpoints = {
+  xs: "(max-width: 576px)",
+  sm: "(min-width: 577px) and (max-width: 768px)",
+  md: "(min-width: 769px) and (max-width: 992px)",
+  lg: "(min-width: 993px) and (max-width: 1200px)",
+  xl: "(min-width: 1201px) and (max-width: 1408px)",
+  aboveXl: "(min-width: 1409px)",
+};
 
+const useResponsive = () => {
   return {
-    isXs: useMediaQuery(
-      `(min-width: 0) and (max-width: ${theme.breakpoints.xs})`
-    ),
-    isSm: useMediaQuery(
-      `(min-width: calc(${theme.breakpoints.xs} + 1px)) and (max-width: ${theme.breakpoints.sm})`
-    ),
-    isMd: useMediaQuery(
-      `(min-width: calc(${theme.breakpoints.sm} + 1px)) and (max-width: ${theme.breakpoints.md})`
-    ),
-    isLg: useMediaQuery(
-      `(min-width: calc(${theme.breakpoints.md} + 1px)) and (max-width: ${theme.breakpoints.lg})`
-    ),
-    isXl: useMediaQuery(
-      `(min-width: calc(${theme.breakpoints.lg} + 1px)) and (max-width: ${theme.breakpoints.xl})`
-    ),
-    isAboveXl: useMediaQuery(
-      `(min-width: calc(${theme.breakpoints.xl} + 1px))`
-    ),
+    // Breakpoints based on screen sizes
+    isXs: useMediaQuery(breakpoints.xs), // Extra small screens
+    isSm: useMediaQuery(breakpoints.sm), // Small screens
+    isMd: useMediaQuery(breakpoints.md), // Medium screens
+    isLg: useMediaQuery(breakpoints.lg), // Large screens
+    isXl: useMediaQuery(breakpoints.xl), // Extra large screens
+    isAboveXl: useMediaQuery(breakpoints.aboveXl), // Screens larger than XL
   };
 };
 
-export default UseResponsive;
+export default useResponsive;
