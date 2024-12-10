@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 import { Group, Image, Divider } from "@mantine/core";
 
@@ -11,7 +11,6 @@ import UseResponsive from "../UseResponsive";
 
 const HeaderMenu = () => {
   const { isXs, isSm, isXl } = UseResponsive();
-  const [isExpanded, setIsExpanded] = useState(true);
 
   const logoSize = useMemo(() => {
     if (isXs) return 20;
@@ -19,17 +18,6 @@ const HeaderMenu = () => {
     if (isXl) return 40;
     return 30;
   }, [isXs, isSm, isXl]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsExpanded(window.scrollY <= 50);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleSearchClick = () => setIsExpanded(true);
 
   return (
     <div
@@ -43,20 +31,12 @@ const HeaderMenu = () => {
       <Group justify="space-between" pt={5} px={5}>
         <Image src="/logo.png" alt="logo" height={logoSize} />
 
-        {(!isExpanded || isXs) && (
-          <SearchComponent onSearch={handleSearchClick} expanded={isExpanded} />
-        )}
+        <SearchComponent />
 
         <User getSize={() => logoSize} />
       </Group>
 
-      {isExpanded && !isXs && (
-        <Group justify="center" p={10}>
-          <SearchComponent onSearch={handleSearchClick} expanded={isExpanded} />
-        </Group>
-      )}
-
-      <Divider />
+      <Divider mt={5} />
     </div>
   );
 };

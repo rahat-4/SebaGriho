@@ -9,7 +9,6 @@ const CITIES = ["Dhaka", "Chittagong", "Sylhet", "Rajshahi"];
 const THANAS = ["Sabujbagh", "Khilgoan"];
 
 interface MultiProps {
-  expended?: boolean;
   size: string;
   placeholder: string;
   icon: React.ReactNode;
@@ -17,7 +16,6 @@ interface MultiProps {
 }
 
 const MultiSearch: React.FC<MultiProps> = ({
-  expended,
   size,
   placeholder,
   icon,
@@ -34,13 +32,6 @@ const MultiSearch: React.FC<MultiProps> = ({
     }
   };
 
-  const getExtendedInputSize = () => {
-    if (isSm) return 100;
-    if (isMd) return 120;
-    if (isLg) return 100;
-    if (isXl) return 100;
-  };
-
   return (
     <MultiSelect
       radius="md"
@@ -54,47 +45,40 @@ const MultiSearch: React.FC<MultiProps> = ({
       rightSection={icon}
       data={data}
       style={{
-        width: isXs ? "100%" : expended ? 200 : getInputSize(),
+        width: isXs ? "100%" : getInputSize(),
       }}
     />
   );
 };
 
-interface MultiSelectProps {
-  expanded?: boolean;
-}
-
-export const SpecialitySearch: React.FC<MultiSelectProps> = ({ expanded }) => {
+export const SpecialitySearch = () => {
   return (
     <MultiSearch
-      expended={expanded}
-      size={expanded ? "md" : "xs"}
+      size={"xs"}
       placeholder="Speciality"
-      icon={<IconStethoscope size={expanded ? 25 : 14} color="#FF385C" />}
+      icon={<IconStethoscope size={14} color="#FF385C" />}
       data={SPECIALITIES}
     />
   );
 };
 
-export const CitySearch: React.FC<MultiSelectProps> = ({ expanded }) => {
+export const CitySearch = () => {
   return (
     <MultiSearch
-      expended={expanded}
-      size={expanded ? "md" : "xs"}
+      size={"xs"}
       placeholder="City"
-      icon={<IconMapPin size={expanded ? 25 : 14} color="#FF385C" />}
+      icon={<IconMapPin size={14} color="#FF385C" />}
       data={CITIES}
     />
   );
 };
 
-export const ThanaSearch: React.FC<MultiSelectProps> = ({ expanded }) => {
+export const ThanaSearch = () => {
   return (
     <MultiSearch
-      expended={expanded}
-      size={expanded ? "md" : "xs"}
+      size={"xs"}
       placeholder="Thana"
-      icon={<IconPrison size={expanded ? 25 : 14} color="#FF385C" />}
+      icon={<IconPrison size={14} color="#FF385C" />}
       data={THANAS}
     />
   );

@@ -1,7 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
 import {
   ActionIcon,
   Button,
@@ -19,12 +17,7 @@ import { IconSearch } from "@tabler/icons-react";
 import { SpecialitySearch, CitySearch, ThanaSearch } from "./MultiSearch";
 import UseResponsive from "../../UseResponsive";
 
-interface Props {
-  expanded: boolean;
-  onSearch: () => void;
-}
-
-const SearchComponent: React.FC<Props> = ({ expanded, onSearch }) => {
+const SearchComponent = () => {
   const { isXs } = UseResponsive();
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -84,7 +77,6 @@ const SearchComponent: React.FC<Props> = ({ expanded, onSearch }) => {
     </>
   ) : (
     <Group
-      py={expanded ? 5 : "none"}
       px={5}
       justify="center"
       gap={0}
@@ -93,20 +85,19 @@ const SearchComponent: React.FC<Props> = ({ expanded, onSearch }) => {
         backgroundColor: "white",
         boxShadow: "0px 0px 5px gray",
       }}
-      onClick={onSearch}
       maw={660}
     >
-      <SpecialitySearch expanded={expanded} />
-      <CitySearch expanded={expanded} />
-      <ThanaSearch expanded={expanded} />
+      <SpecialitySearch />
+      <CitySearch />
+      <ThanaSearch />
       <ActionIcon
         c={"white"}
         variant="filled"
         color="#FF385C"
-        size={expanded ? "xl" : "sm"}
+        size={"sm"}
         radius="xl"
       >
-        <IconSearch size={expanded ? 25 : 14} />
+        <IconSearch size={14} />
       </ActionIcon>
     </Group>
   );
