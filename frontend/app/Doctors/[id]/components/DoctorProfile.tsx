@@ -34,7 +34,11 @@ import DoctorProfileTabs from "./DoctorProfileTabs";
 
 import DocOne from "@/public/doc_one.jpg";
 
+import useResponsive from "@/app/components/UseResponsive";
+
 const DoctorProfile = () => {
+  const { isXs } = useResponsive();
+
   const doctorDetails = {
     name: "Dr. Marzan Sultana",
     id: "101",
@@ -49,11 +53,13 @@ const DoctorProfile = () => {
   };
 
   return (
-    <Grid justify="flex-start" my="sm" gutter="xs">
-      <GridCol span={{ base: 12, sm: 4, lg: 3 }}>
-        <Address />
-      </GridCol>
-      <GridCol span={{ base: 12, sm: 6, lg: 7 }}>
+    <Grid justify="center" my="sm" gutter="xs">
+      {!isXs && (
+        <GridCol span={{ base: 12, sm: 4, md: 3, lg: 2 }}>
+          <Address />
+        </GridCol>
+      )}
+      <GridCol span={{ base: 12, sm: 8, md: 6, lg: 4 }}>
         <Paper shadow="md" radius={"md"} withBorder p="xs" pos="relative">
           {/* Profile Header */}
           <Box pos="relative" mb="xs">

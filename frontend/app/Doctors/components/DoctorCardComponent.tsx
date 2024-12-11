@@ -21,7 +21,7 @@ interface DoctorCardProps {
   workingLocation: string;
 }
 
-const DoctorListCard: React.FC<DoctorCardProps> = ({
+const DoctorCardComponent: React.FC<DoctorCardProps> = ({
   name,
   degrees,
   speciality,
@@ -104,4 +104,4 @@ const DoctorListCard: React.FC<DoctorCardProps> = ({
   );
 };
 
-export default DoctorListCard;
+export default DoctorCardComponent;

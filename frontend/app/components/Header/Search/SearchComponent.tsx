@@ -95,7 +95,7 @@ const SearchComponent = () => {
         c={"white"}
         variant="filled"
         color="#FF385C"
-        size={isAboveXl || isXl ? 50 : isLg ? 45 : isMd ? 40 : 35}
+        size={isAboveXl || isXl ? 45 : isLg ? 40 : isMd ? 35 : 30}
         radius="xl"
       >
         <IconSearch

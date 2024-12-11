@@ -1,6 +1,6 @@
-import { SimpleGrid, Divider } from "@mantine/core";
+import { SimpleGrid } from "@mantine/core";
 
-import DoctorList from "./components/doctor/DoctorList";
+import Index from "./doctors/page";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
           maxWidth: "fit-content",
         }}
       >
-        <DoctorList />
+        <Index />
       </SimpleGrid>
     </main>
   );
