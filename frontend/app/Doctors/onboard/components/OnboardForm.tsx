@@ -1,43 +1,44 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  TextInput,
-  NumberInput,
-  Select,
-  Paper,
-  Title,
   Button,
-  Group,
-  Stack,
   Divider,
+  Group,
+  NumberInput,
+  Paper,
+  Stack,
+  TextInput,
+  Title
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useState } from "react";
 
 // Types to match the JSON structure
 interface User {
+  avatar: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
   email: string;
   phone: string;
-  first_name: string;
-  last_name: string;
-}
-
-interface Department {
-  name: string;
-  description: string;
+  bmdcNumber: number;
+  nid: number;
+  gender: string;
+  bloodGroup: string;
+  dateOfBirth: string;
+  about: string;
 }
 
 interface Degree {
   name: string;
   institute: string;
   result: string;
-  passing_year: string;
+  passingYear: string;
+  country: string;
 }
 
-interface Achievement {
+interface Department {
   name: string;
-  source: string;
-  year: string;
+  description: string;
 }
 
 interface Specialty {
@@ -47,82 +48,44 @@ interface Specialty {
 
 interface Affiliation {
   title: string;
-  hospital_name: string;
+  hospitalName: string;
+  status: string;
+}
+
+interface Achievement {
+  name: string;
+  source: string;
+  year: string;
 }
 
 interface LanguageSpoken {
   language: string;
 }
 
+
 interface DoctorProfileFormProps {
   initialData?: {
     user: User;
-    about: string;
-    experience: number;
-    appointment_fee: number;
-    consultation_fee: number;
-    follow_up_fee: number;
-    check_up_fee: number;
-    department: Department;
     degree: Degree[];
     achievement: Achievement[];
+    department: Department;
     specialty: Specialty[];
     affiliation: Affiliation[];
     language_spoken: LanguageSpoken[];
+    experience: number;
+    appointmentFee: number;
+    followUpFee: number;
   };
 }
 
-const OnboardForm: React.FC<DoctorProfileFormProps> = ({ initialData }) => {
-  const [degrees, setDegrees] = useState<Degree[]>(initialData?.degree || []);
-  const [achievements, setAchievements] = useState<Achievement[]>(
-    initialData?.achievement || []
-  );
-  const [specialties, setSpecialties] = useState<Specialty[]>(
-    initialData?.specialty || []
-  );
-  const [affiliations, setAffiliations] = useState<Affiliation[]>(
-    initialData?.affiliation || []
-  );
-  const [languagesSpoken, setLanguagesSpoken] = useState<LanguageSpoken[]>(
-    initialData?.language_spoken || []
-  );
+const OnboardForm = () => {
+  const [degrees, setDegrees] = useState<Degree[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [specialties, setSpecialties] = useState<Specialty[]>([]);
+  const [affiliations, setAffiliations] = useState<Affiliation[]>([]);
+  const [languagesSpoken, setLanguagesSpoken] = useState<LanguageSpoken[]>([]);
 
-  const form = useForm({
-    initialValues: {
-      email: initialData?.user?.email || "",
-      phone: initialData?.user?.phone || "",
-      first_name: initialData?.user?.first_name || "",
-      last_name: initialData?.user?.last_name || "",
-      about: initialData?.about || "",
-      experience: initialData?.experience || 0,
-      appointment_fee: initialData?.appointment_fee || 0,
-      consultation_fee: initialData?.consultation_fee || 0,
-      follow_up_fee: initialData?.follow_up_fee || 0,
-      check_up_fee: initialData?.check_up_fee || 0,
-      department_name: initialData?.department?.name || "",
-      department_description: initialData?.department?.description || "",
-    },
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      phone: (value) =>
-        /^\+?\d{10,14}$/.test(value) ? null : "Invalid phone number",
-      first_name: (value) => (value.length < 2 ? "Name is too short" : null),
-      last_name: (value) => (value.length < 2 ? "Name is too short" : null),
-    },
-  });
-
-  const handleSubmit = (values: typeof form.values) => {
-    const doctorProfile = {
-      ...values,
-      degrees,
-      achievements,
-      specialties,
-      affiliations,
-      languages_spoken: languagesSpoken,
-    };
-    console.log("Submitted Doctor Profile:", doctorProfile);
-    // Add your submission logic here
-  };
 
   const addDegree = () => {
     setDegrees([
@@ -131,7 +94,28 @@ const OnboardForm: React.FC<DoctorProfileFormProps> = ({ initialData }) => {
         name: "",
         institute: "",
         result: "",
-        passing_year: "",
+        passingYear: "",
+        country: "",
+      },
+    ]);
+  };
+
+  const addDepartment = () => {
+    setDepartments([
+      ...departments,
+      {
+        name: "",
+        description: "",
+      },
+    ]);
+  }
+
+  const addSpecialty = () => {
+    setSpecialties([
+      ...specialties,
+      {
+        name: "",
+        department: { name: "", description: "" },
       },
     ]);
   };
@@ -147,22 +131,14 @@ const OnboardForm: React.FC<DoctorProfileFormProps> = ({ initialData }) => {
     ]);
   };
 
-  const addSpecialty = () => {
-    setSpecialties([
-      ...specialties,
-      {
-        name: "",
-        department: { name: "", description: "" },
-      },
-    ]);
-  };
 
   const addAffiliation = () => {
     setAffiliations([
       ...affiliations,
       {
         title: "",
-        hospital_name: "",
+        hospitalName: "",
+        status: "",
       },
     ]);
   };
@@ -183,20 +159,23 @@ const OnboardForm: React.FC<DoctorProfileFormProps> = ({ initialData }) => {
         Doctor Profile Form
       </Title>
 
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <form>
         <Stack>
           {/* Personal Information */}
           <Group grow>
             <TextInput
               label="First Name"
               placeholder="Enter first name"
-              {...form.getInputProps("first_name")}
+              required
+            />
+                        <TextInput
+              label="Middle Name"
+              placeholder="Enter Middle name"
               required
             />
             <TextInput
               label="Last Name"
               placeholder="Enter last name"
-              {...form.getInputProps("last_name")}
               required
             />
           </Group>
@@ -205,13 +184,11 @@ const OnboardForm: React.FC<DoctorProfileFormProps> = ({ initialData }) => {
             <TextInput
               label="Email"
               placeholder="your@email.com"
-              {...form.getInputProps("email")}
               required
             />
             <TextInput
               label="Phone Number"
               placeholder="+8801XXXXXXXXX"
-              {...form.getInputProps("phone")}
               required
             />
           </Group>
@@ -219,7 +196,6 @@ const OnboardForm: React.FC<DoctorProfileFormProps> = ({ initialData }) => {
           <TextInput
             label="About"
             placeholder="Brief description about yourself"
-            {...form.getInputProps("about")}
           />
 
           {/* Professional Details */}
@@ -227,12 +203,6 @@ const OnboardForm: React.FC<DoctorProfileFormProps> = ({ initialData }) => {
             <NumberInput
               label="Years of Experience"
               placeholder="Total years of experience"
-              {...form.getInputProps("experience")}
-            />
-            <TextInput
-              label="Department"
-              placeholder="Your primary department"
-              {...form.getInputProps("department_name")}
             />
           </Group>
 
@@ -240,12 +210,10 @@ const OnboardForm: React.FC<DoctorProfileFormProps> = ({ initialData }) => {
             <NumberInput
               label="Appointment Fee"
               placeholder="Fee for appointments"
-              {...form.getInputProps("appointment_fee")}
             />
             <NumberInput
               label="Consultation Fee"
               placeholder="Fee for consultations"
-              {...form.getInputProps("consultation_fee")}
             />
           </Group>
 
@@ -254,32 +222,131 @@ const OnboardForm: React.FC<DoctorProfileFormProps> = ({ initialData }) => {
           {degrees.map((degree, index) => (
             <Group key={index} grow>
               <TextInput
-                label="Degree Name"
+                label="Degree"
                 placeholder="e.g., Doctor of Medicine"
                 value={degree.name}
-                onChange={(e) => {
-                  const newDegrees = [...degrees];
-                  newDegrees[index].name = e.currentTarget.value;
-                  setDegrees(newDegrees);
-                }}
               />
               <TextInput
                 label="Institute"
-                placeholder="Institution name"
+                placeholder="Institution"
                 value={degree.institute}
-                onChange={(e) => {
-                  const newDegrees = [...degrees];
-                  newDegrees[index].institute = e.currentTarget.value;
-                  setDegrees(newDegrees);
-                }}
               />
             </Group>
           ))}
           <Button variant="outline" onClick={addDegree}>
             Add Degree
           </Button>
+            
+          {/* Departments Section */}
+          <Divider label="Departments" labelPosition="center" />
+          {departments.map((department, index) => (
+            <Group key={index} grow>
+              <TextInput
+                label="Department"
+                placeholder="e.g., Cardiology"
+                value={department.name}
+              />
+              <TextInput
+                label="Description"
+                placeholder="Description"
+                value={department.description}
+              />
+            </Group>
+          ))}
 
-          {/* Similar sections for Achievements, Specialties, Affiliations, and Languages */}
+          <Button variant="outline" onClick={addDepartment}>
+            Add Department
+          </Button>
+            
+          {/* Specialties Section */}
+          <Divider label="Specialties" labelPosition="center" />
+          {specialties.map((specialty, index) => (
+            <Group key={index} grow>
+              <TextInput
+                label="Specialty"
+                placeholder="e.g., Cardiologist"
+                value={specialty.name}
+              />
+              <TextInput
+                label="Department"
+                placeholder="Department name"
+                value={specialty.department.name}
+              />
+              <TextInput
+                label="Description"
+                placeholder="Description"
+                value={specialty.department.description}
+              />
+            </Group>
+          ))}
+          <Button variant="outline" onClick={addSpecialty}>
+            Add Specialty
+          </Button>
+            
+          {/* Achievements Section */}
+          <Divider label="Achievements" labelPosition="center" />
+          {achievements.map((achievement, index) => (
+            <Group key={index} grow>
+              <TextInput
+                label="Achievement"
+                placeholder="e.g., Best Doctor Award"
+                value={achievement.name}
+              />
+              <TextInput
+                label="Source"
+                placeholder="Source of achievement"
+                value={achievement.source}
+              />
+              <TextInput
+                label="Year"
+                placeholder="Year of achievement"
+                value={achievement.year}
+              />
+            </Group>
+          ))}
+          <Button variant="outline" onClick={addAchievement}>
+            Add Achievement
+          </Button>
+              
+          {/* Affiliations Section */}
+          <Divider label="Affiliations" labelPosition="center" />
+          {affiliations.map((affiliation, index) => (
+            <Group key={index} grow>
+              <TextInput
+                label="Title"
+                placeholder="e.g., Consultant"
+                value={affiliation.title}
+              />
+              <TextInput
+                label="Hospital"
+                placeholder="Hospital name"
+                value={affiliation.hospitalName}
+              />
+              <TextInput
+                label="Status"
+                placeholder="e.g., Active"
+                value={affiliation.status}
+              />
+            </Group>
+          ))}
+          <Button variant="outline" onClick={addAffiliation}>
+            Add Affiliation
+          </Button>
+              
+          {/* Languages Spoken Section */}
+          <Divider label="Languages Spoken" labelPosition="center" />
+          {languagesSpoken.map((language, index) => (
+            <Group key={index} grow>
+              <TextInput
+                label="Language"
+                placeholder="e.g., English"
+                value={language.language}
+              />
+            </Group>
+          ))}
+          <Button variant="outline" onClick={addLanguage}>
+            Add Language
+          </Button>
 
           <Group mt="xl">
             <Button type="submit" color="blue">
