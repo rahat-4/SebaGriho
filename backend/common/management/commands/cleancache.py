@@ -13,6 +13,13 @@ class Command(BaseCommand):
 
         # Walk through the directory tree
         for dirpath, dirnames, filenames in os.walk(root_dir):
+            # Skip env directories
+            if "env" in dirnames:
+                dirnames.remove("env")
+                
+            if 'venv' in dirnames:
+                dirnames.remove('venv')
+
             # Remove __pycache__ directories
             if "__pycache__" in dirnames:
                 pycache_path = os.path.join(dirpath, "__pycache__")
@@ -34,3 +41,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f"Removed: {db_path}"))
 
         self.stdout.write(self.style.SUCCESS("Clean up complete!"))
+

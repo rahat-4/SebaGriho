@@ -22,4 +22,12 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Running createsuperuser command..."))
         call_command("create_superuser")
 
+        # Run create_departments command
+        self.stdout.write(self.style.SUCCESS("Running create_departments command..."))
+        call_command("create_departments")
+
+        # Run create_specialities command
+        self.stdout.write(self.style.SUCCESS("Running create_specialities command..."))
+        call_command("create_specialities")
+
         self.stdout.write(self.style.SUCCESS("All commands executed successfully!"))

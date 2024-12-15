@@ -20,17 +20,24 @@ from common.models import BaseModelWithUid
 
 class User(AbstractBaseUser, BaseModelWithUid, PermissionsMixin):
     slug = AutoSlugField(populate_from=get_user_slug, unique=True)
+    phone = PhoneNumberField(unique=True)
     email = models.EmailField(
         verbose_name="email address",
         max_length=255,
         unique=True,
+        blank=True,
     )
-    phone = PhoneNumberField(blank=True)
     secondary_phone = PhoneNumberField(blank=True)
     secondary_email = models.EmailField(blank=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     nid = models.CharField(max_length=20, blank=True)
+    nid_front = models.ImageField(
+        upload_to=get_user_media_path_prefix, blank=True, null=True
+    )
+    nid_back = models.ImageField(
+        upload_to=get_user_media_path_prefix, blank=True, null=True
+    )
     avatar = models.ImageField(
         "Avatar",
         upload_to=get_user_media_path_prefix,
@@ -63,8 +70,11 @@ class User(AbstractBaseUser, BaseModelWithUid, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "phone"
     REQUIRED_FIELDS = []
+
+    class Meta:
+        unique_together = ["phone", "email"]
 
     def __str__(self):
         return self.email

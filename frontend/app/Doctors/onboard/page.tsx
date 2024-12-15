@@ -73,7 +73,7 @@ const initialDoctorData = {
 };
 
 const Index = () => {
-  return <OnboardForm initialData={initialDoctorData} />;
+  return <OnboardForm />;
 };
 
 export default Index;

@@ -15,17 +15,56 @@ from apps.doctor.models import (
 User = get_user_model()
 
 
+class UserSlimSerializer(serializers.ModelSerializer):
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        if attrs["password"] != attrs["confirm_password"]:
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match."}
+            )
+        return attrs
+    
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "phone", "email", "gender", "password", "confirm_password"]
+        
+    
+
+class DegreeSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Degree
+        fields = ["name", "institute", "result", "passing_year", "country"]
+
+
 class DepartmentSlimSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = ["name", "description"]
+        fields = ["uid", "name", "description"]
 
+class SpecialtySlimSerializer(serializers.ModelSerializer):
+    department = DepartmentSlimSerializer()
 
-class UserSlimSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ["first_name", "last_name", "email", "phone", "gender"]
+        model = Specialty
+        fields = ["uid", "name", "department"]
 
+class AchievementSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Achievement
+        fields = ["uid", "name", "source", "year"]
+
+
+class AffiliationSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Affiliation
+        fields = ['uid', "title", "hospital_name", "status"]
+
+
+class LanguageSpokenSlimSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LanguageSpoken
+        fields = ["language"]
 
 class DoctorSlimSerializer(serializers.ModelSerializer):
     user = UserSlimSerializer()
@@ -36,33 +75,6 @@ class DoctorSlimSerializer(serializers.ModelSerializer):
         fields = ["user", "about", "department", "experience"]
 
 
-class LanguageSpokenSlimSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LanguageSpoken
-        fields = ["language"]
 
 
-class SpecialtySlimSerializer(serializers.ModelSerializer):
-    department = DepartmentSlimSerializer()
 
-    class Meta:
-        model = Specialty
-        fields = ["name", "department"]
-
-
-class AchievementSlimSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Achievement
-        fields = ["name", "source", "year"]
-
-
-class DegreeSlimSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Degree
-        fields = ["name", "institute", "result", "passing_year", "country"]
-
-
-class AffiliationSlimSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Affiliation
-        fields = ["title", "hospital_name", "status"]

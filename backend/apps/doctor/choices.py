@@ -1,6 +1,10 @@
 from django.db import models
 
 
+class DepartmentType(models.TextChoices):
+    MEDICAL = "MEDICAL", "Medical"
+    DENTAL = "DENTAL", "Dental"
+
 class AffiliationStatus(models.TextChoices):
     CURRENT = "CURRENT", "Current"
     PAST = "PAST", "Past"

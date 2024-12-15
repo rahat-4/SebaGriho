@@ -1,10 +1,14 @@
 {
   "user": {
-    "email": "nahid@example.com",
-    "phone": "+8801776199864",
     "first_name": "Nahid",
-    "last_name": "Hasan"
+    "last_name": "Hasan",
+    "phone": "+8801776199864",
+    "email": "nahid@example.com",
+    "gender": "MALE",
+    "password": "password123",
+    "confirm_password": "password123"
   },
+  "registration_number": "123456",
   "about": "Experienced physician specializing in internal medicine.",
   "experience": 4,
   "appointment_fee": 300,
@@ -12,37 +16,39 @@
   "follow_up_fee": 100,
   "check_up_fee": 100,
   "status": "ACTIVE",
-  "department": {
-    "name": "Cardiology",
-    "description": "Specializes in heart-related issues."
-  },
-  "degree": [
+  "department": [
+    {
+      "name": "Cardiology",
+      "description": "Specializes in heart-related issues."
+    }
+  ],
+  "degrees": [
     {
       "name": "Doctor of Medicine",
       "institute": "Medical College",
       "result": "Distinction",
-      "passing_year": "2010-08-08"
+      "passing_year": 2010
     },
     {
       "name": "Master of Science",
       "institute": "University of Health Sciences",
       "result": "First Class",
-      "passing_year": "2015-08-08"
+      "passing_year": 2015
     }
   ],
-  "achievement": [
+  "achievements": [
     {
       "name": "Outstanding Doctor Award",
       "source": "Medical Association",
-      "year": "2018-08-08"
+      "year": 2018
     },
     {
       "name": "Research Paper Award",
       "source": "International Medical Conference",
-      "year": "2019-08-08"
+      "year": 2019
     }
   ],
-  "specialty": [
+  "specialties": [
     {
       "name": "Cardiac Electrophysiology",
       "department": {
@@ -58,7 +64,7 @@
       }
     }
   ],
-  "affiliation": [
+  "affiliations": [
     {
       "title": "Consultant Cardiologist",
       "hospital_name": "City Hospital"
@@ -68,5 +74,5 @@
       "hospital_name": "General Hospital"
     }
   ],
-  "language_spoken": [{ "language": "English" }, { "language": "Bangla" }]
+  "languages_spoken": [{ "language": "English" }, { "language": "Bangla" }]
 }

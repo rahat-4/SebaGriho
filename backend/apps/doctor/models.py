@@ -4,6 +4,7 @@ from apps.authentication.models import User
 from common.models import BaseModelWithUid
 from .choices import (
     AffiliationStatus,
+    DepartmentType,
     DoctorStatus,
     ScheduleStatus,
     ShiftStatus,
@@ -19,8 +20,8 @@ class LanguageSpoken(BaseModelWithUid):
 
 
 class Department(BaseModelWithUid):
-    name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
+    name = models.CharField(max_length=255, unique=True)
     description = models.TextField(blank=True, null=True)
     parent = models.ForeignKey(
         "self",
@@ -29,8 +30,9 @@ class Department(BaseModelWithUid):
         blank=True,
         related_name="sub_departments",
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    department_type = models.CharField(
+        max_length=20, choices=DepartmentType.choices, default=DepartmentType.MEDICAL
+    )
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -47,6 +49,14 @@ class Specialty(BaseModelWithUid):
 
     def __str__(self):
         return f"{self.name} (UID: {self.uid})"
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name", "department"], name="unique_specialty_per_department"
+            )
+        ]
+
 
 
 class Achievement(BaseModelWithUid):
@@ -84,49 +94,35 @@ class Affiliation(BaseModelWithUid):
 
 
 class Doctor(BaseModelWithUid):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="doctor")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="doctor_profile")
     registration_number = models.CharField(max_length=255, unique=True)
-    about = models.TextField(blank=True)
-    departments = models.ManyToManyField(Department, blank=True, related_name="doctors")
-    specialties = models.ManyToManyField(Specialty, blank=True, related_name="doctors")
     experience = models.PositiveIntegerField()
+    about = models.TextField(blank=True)
     appointment_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    consultation_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     follow_up_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    consultation_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     check_up_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    degrees = models.ManyToManyField(Degree, related_name="doctor_degrees")
+    departments = models.ManyToManyField(Department, related_name="doctor_departments")
+    specialties = models.ManyToManyField(Specialty, related_name="doctor_specialties")
+    achievements = models.ManyToManyField(
+        Achievement, blank=True, related_name="docto_achievements"
+    )
+    affiliations = models.ManyToManyField(
+        Affiliation, related_name="doctor_affiliations"
+    )
+    languages_spoken = models.ManyToManyField(
+        LanguageSpoken, related_name="doctor_languages_spoken"
+    )
     status = models.CharField(
         max_length=20,
         choices=DoctorStatus.choices,
         db_index=True,
         default=DoctorStatus.ACTIVE,
     )
-    degrees = models.ManyToManyField(Degree, blank=True, related_name="doctors")
-    achievements = models.ManyToManyField(
-        Achievement, blank=True, related_name="doctors"
-    )
-    affiliations = models.ManyToManyField(
-        Affiliation, blank=True, related_name="doctors"
-    )
-    languages_spoken = models.ManyToManyField(
-        LanguageSpoken, blank=True, related_name="doctors"
-    )
 
     def __str__(self):
         return f"Dr. {self.user.get_full_name()} (UID: {self.uid})"
-
-    def get_primary_department(self):
-        return self.departments.first()
-
-
-class DoctorContact(BaseModelWithUid):
-    doctor = models.ForeignKey(
-        Doctor, on_delete=models.CASCADE, related_name="contacts"
-    )
-    contact_type = models.CharField(max_length=50)  # e.g., 'Phone', 'Email', 'WhatsApp'
-    contact_value = models.CharField(max_length=255)
-
-    def __str__(self):
-        return f"{self.contact_type}: {self.contact_value}"
 
 
 class Schedule(BaseModelWithUid):
