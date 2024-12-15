@@ -17,21 +17,21 @@ from .utils import get_user_media_path_prefix, get_user_slug
 
 from common.models import BaseModelWithUid
 
-
-class User(AbstractBaseUser, BaseModelWithUid, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin, BaseModelWithUid):
     slug = AutoSlugField(populate_from=get_user_slug, unique=True)
     phone = PhoneNumberField(unique=True)
     email = models.EmailField(
-        verbose_name="email address",
+        verbose_name="Email Address",
         max_length=255,
         unique=True,
         blank=True,
+        null=True
     )
-    secondary_phone = PhoneNumberField(blank=True)
-    secondary_email = models.EmailField(blank=True)
+    secondary_phone = PhoneNumberField(blank=True, null=True)
+    secondary_email = models.EmailField(blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
-    nid = models.CharField(max_length=20, blank=True)
+    nid = models.CharField(max_length=20, blank=True, null=True)
     nid_front = models.ImageField(
         upload_to=get_user_media_path_prefix, blank=True, null=True
     )
@@ -42,6 +42,7 @@ class User(AbstractBaseUser, BaseModelWithUid, PermissionsMixin):
         "Avatar",
         upload_to=get_user_media_path_prefix,
         blank=True,
+        null=True,
     )
     gender = models.CharField(
         max_length=20,
@@ -51,8 +52,9 @@ class User(AbstractBaseUser, BaseModelWithUid, PermissionsMixin):
     )
     blood_group = models.CharField(
         max_length=5,
-        blank=True,
         choices=BloodGroups.choices,
+        blank=True,
+        null=True
     )
     date_of_birth = models.DateField(blank=True, null=True)
     height = models.FloatField(blank=True, null=True)
@@ -66,6 +68,7 @@ class User(AbstractBaseUser, BaseModelWithUid, PermissionsMixin):
     )
 
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
     objects = UserManager()
@@ -73,43 +76,29 @@ class User(AbstractBaseUser, BaseModelWithUid, PermissionsMixin):
     USERNAME_FIELD = "phone"
     REQUIRED_FIELDS = []
 
-    class Meta:
-        unique_together = ["phone", "email"]
-
     def __str__(self):
-        return self.email
-
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return True
-
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        return True
-
-    @property
-    def is_staff(self):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
-        return self.is_admin
+        return self.email or str(self.phone) or "Anonymous User"
 
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
+        if self.secondary_email:
+            self.secondary_email = self.__class__.objects.normalize_email(
+                self.secondary_email
+            )
 
     def get_full_name(self):
         """
         Return the first_name plus the last_name, with a space in between.
         """
-        full_name = "%s %s" % (self.first_name, self.last_name)
-        return full_name.strip()
+        return f"{self.first_name or ''} {self.last_name or ''}".strip()
 
     def get_short_name(self):
         """Return the short name for the user."""
-        return self.first_name
+        return self.first_name or self.email or self.phone
 
-    # def email_user(self, subject, message, from_email=None, **kwargs):
-    #     """Send an email to this user."""
-    #     send_mail(subject, message, from_email, [self.email], **kwargs)
+    def get_display_name(self):
+        """
+        Return the most descriptive name available (first_name, email, or phone).
+        """
+        return self.get_full_name() or self.email or self.phone

@@ -30,4 +30,8 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Running create_specialities command..."))
         call_command("create_specialities")
 
+        # Run create_languages command
+        self.stdout.write(self.style.SUCCESS("Running create_languages command..."))
+        call_command("create_languages")
+
         self.stdout.write(self.style.SUCCESS("All commands executed successfully!"))

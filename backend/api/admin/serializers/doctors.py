@@ -84,11 +84,11 @@ class AdminDoctorListSerializer(serializers.ModelSerializer):
             affiliations = [Affiliation.objects.get_or_create(**data)[0] for data in affiliations_data]
 
             # Add many-to-many relations
-            doctor_instance.departments.add(*departments)
             doctor_instance.degrees.add(*degrees)
+            doctor_instance.departments.add(*departments)
+            doctor_instance.specialties.add(*specialty_instances)
             doctor_instance.achievements.add(*achievements)
             doctor_instance.affiliations.add(*affiliations)
             doctor_instance.languages_spoken.add(*languages_spoken)
-            doctor_instance.specialties.add(*specialty_instances)
 
             return doctor_instance
