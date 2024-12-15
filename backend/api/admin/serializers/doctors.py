@@ -29,15 +29,49 @@ User = get_user_model()
 class AdminDoctorListSerializer(serializers.ModelSerializer):
     user = UserSlimSerializer()
     degrees = DegreeSlimSerializer(many=True)
-    specialties = SpecialtySlimSerializer(many=True)
-    departments = DepartmentSlimSerializer(many=True)
     achievements = AchievementSlimSerializer(many=True)
     affiliations = AffiliationSlimSerializer(many=True)
-    languages_spoken = LanguageSpokenSlimSerializer(many=True)
+    departments = serializers.SlugRelatedField(
+        many=True,
+        slug_field="uid",
+        queryset=Department.objects.all(),
+        write_only=True,
+    )
+    specialties = serializers.SlugRelatedField(
+        many=True,
+        slug_field="uid",
+        queryset=Specialty.objects.all(),
+        write_only=True,
+    )
+    languages_spoken = serializers.SlugRelatedField(
+        many=True,
+        slug_field="uid",
+        queryset=LanguageSpoken.objects.all(),
+        write_only=True,
+    )
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        departments = DepartmentSlimSerializer(
+            instance.departments.all(), many=True
+        ).data
+        specialties = SpecialtySlimSerializer(
+            instance.specialties.all(), many=True
+            ).data
+        languages_spoken = LanguageSpokenSlimSerializer(
+            instance.languages_spoken.all(), many=True
+            ).data
+        
+        representation["departments"] = departments
+        representation["specialties"] = specialties
+        representation["languages_spoken"] = languages_spoken
+
+        return representation
 
     class Meta:
         model = Doctor
         fields = [
+            "uid",
             "user",
             "registration_number",
             "experience",
@@ -59,12 +93,12 @@ class AdminDoctorListSerializer(serializers.ModelSerializer):
         # Use atomic transaction to ensure data integrity
         with transaction.atomic():
             # Extract nested data
+            departments = validated_data.pop("departments")
+            languages_spoken = validated_data.pop("languages_spoken")
+            specialty_instances = validated_data.pop("specialties")
             degrees_data = validated_data.pop("degrees")
-            departments_data = validated_data.pop("departments")
-            achievements_data = validated_data.pop("achievements", [])
-            specialties_data = validated_data.pop("specialties")
             affiliations_data = validated_data.pop("affiliations")
-            languages_spoken_data = validated_data.pop("languages_spoken")
+            achievements_data = validated_data.pop("achievements", [])
 
             # Handle user creation
             user_data = validated_data.pop("user")
@@ -75,10 +109,6 @@ class AdminDoctorListSerializer(serializers.ModelSerializer):
             doctor_instance = Doctor.objects.create(user=user, **validated_data)
 
             # Bulk create many-to-many relations
-            departments = [Department.objects.get(data) for data in departments_data]
-            specialty_instances = [Specialty.objects.get(data) for data in specialties_data]
-            languages_spoken = [LanguageSpoken.objects.get(data) for data in languages_spoken_data]
-            
             degrees = [Degree.objects.get_or_create(**data)[0] for data in degrees_data]
             achievements = [Achievement.objects.get_or_create(**data)[0] for data in achievements_data]
             affiliations = [Affiliation.objects.get_or_create(**data)[0] for data in affiliations_data]

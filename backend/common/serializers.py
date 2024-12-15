@@ -34,7 +34,7 @@ class UserSlimSerializer(serializers.ModelSerializer):
 class DegreeSlimSerializer(serializers.ModelSerializer):
     class Meta:
         model = Degree
-        fields = ["name", "institute", "result", "passing_year", "country"]
+        fields = ["uid", "name", "institute", "result", "passing_year", "country"]
 
 
 class DepartmentSlimSerializer(serializers.ModelSerializer):
@@ -64,7 +64,7 @@ class AffiliationSlimSerializer(serializers.ModelSerializer):
 class LanguageSpokenSlimSerializer(serializers.ModelSerializer):
     class Meta:
         model = LanguageSpoken
-        fields = ["language"]
+        fields = ['uid', "language"]
 
 class DoctorSlimSerializer(serializers.ModelSerializer):
     user = UserSlimSerializer()

@@ -16,12 +16,7 @@
   "follow_up_fee": 100,
   "check_up_fee": 100,
   "status": "ACTIVE",
-  "department": [
-    {
-      "name": "Cardiology",
-      "description": "Specializes in heart-related issues."
-    }
-  ],
+  "departments": ["6b267f51-e418-4aa2-9c95-7b3fcd0633a0"],
   "degrees": [
     {
       "name": "Doctor of Medicine",
@@ -48,22 +43,7 @@
       "year": 2019
     }
   ],
-  "specialties": [
-    {
-      "name": "Cardiac Electrophysiology",
-      "department": {
-        "name": "Cardiology",
-        "description": "Specializes in heart-related issues."
-      }
-    },
-    {
-      "name": "Interventional Cardiology",
-      "department": {
-        "name": "Cardiology",
-        "description": "Specializes in heart-related issues."
-      }
-    }
-  ],
+  "specialties": ["37967cc1-db7f-4322-bafe-947c2c24a623"],
   "affiliations": [
     {
       "title": "Consultant Cardiologist",
@@ -74,5 +54,8 @@
       "hospital_name": "General Hospital"
     }
   ],
-  "languages_spoken": [{ "language": "English" }, { "language": "Bangla" }]
+  "languages_spoken": [
+    "2843a57f-a391-4bc1-96b3-d32005003bf9",
+    "44a71119-ba6f-43f6-b58b-44cdbc610805"
+  ]
 }
