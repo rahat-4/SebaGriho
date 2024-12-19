@@ -2,7 +2,12 @@
 
 import { useMemo } from "react";
 
-import { Group, Image, Divider } from "@mantine/core";
+import { Group, Image, Divider, Button, ButtonGroup } from "@mantine/core";
+import {
+  IconSortDescending,
+  IconAdjustmentsAlt,
+  IconLocation,
+} from "@tabler/icons-react";
 
 import SearchComponent from "./Search/SearchComponent";
 
@@ -13,7 +18,7 @@ const HeaderMenu = () => {
   const { isXs, isSm, isMd, isLg, isXl, isAboveXl } = UseResponsive();
 
   const logoSize = useMemo(() => {
-    if (isXs) return 20;
+    if (isXs) return 17;
     if (isSm) return 25;
     if (isMd) return 30;
     if (isLg) return 35;
@@ -35,6 +40,34 @@ const HeaderMenu = () => {
         <SearchComponent />
 
         <User getSize={() => logoSize} />
+      </Group>
+      <Group justify="space-between" px={5}>
+        <Button
+          variant="default"
+          size="compact-xs"
+          rightSection={<IconLocation size={12} />}
+          style={{ fontSize: 10 }}
+        >
+          Location
+        </Button>
+        <ButtonGroup>
+          <Button
+            variant="default"
+            size="compact-xs"
+            rightSection={<IconAdjustmentsAlt size={12} />}
+            style={{ fontSize: 10 }}
+          >
+            Filter
+          </Button>
+          <Button
+            variant="default"
+            size="compact-xs"
+            rightSection={<IconSortDescending size={12} />}
+            style={{ fontSize: 10 }}
+          >
+            Sort by
+          </Button>
+        </ButtonGroup>
       </Group>
 
       <Divider mt={5} />
